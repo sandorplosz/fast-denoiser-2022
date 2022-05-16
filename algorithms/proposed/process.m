@@ -7,10 +7,9 @@ estimateBackground=2;
 PPP = [0.1, 1, 5, 10, 30];
 SBR  = [0.1, 1, 5, 10, 30];
 
-outDir = strcat('/home/ps2014/Development/matlab/fast_denoiser_2022/results_algo/',irfs(selirf));
-addpath('/home/ps2014/Development/matlab/fast_denoiser_2022/algo')
+outDir = strcat('../../results/proposed/',irfs(selirf));
 
-Neighbours.I_resol = [1 3 9] ;  % size of spatial correlations Requires
+Neighbours.I_resol = [1 3 7] ;  % size of spatial correlations Requires
 %Neighbours.I_resol = [1 7 13] ;  % size of spatial correlations Requires
 [Neighbours.neighb, Neighbours.indGraph, Neighbours.local_shifts]  =  Build_Graph_Neighbours_Array_v2(row,col,[1 Neighbours.I_resol(2:end)]); % Define graph of correlations between pixels
 Neighbours.neighb  = Neighbours.neighb(1:end-1,:);
