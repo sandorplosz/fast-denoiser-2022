@@ -1,6 +1,6 @@
 % Based on Abdi's script Build_Synth_Data_TCI2021_robustMS_UnifGammaB.m
 
-function [Sg_Poiss, Yg_Poiss, Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PPP, SBR, choix, downSam, outFile)
+function [ Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PPP, SBR, choix, downSam, outFile)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% Median filter: Reconstruct missing parts
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -34,6 +34,7 @@ function [Sg_Poiss, Yg_Poiss, Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PP
     Iref = Iref/max(Iref(:));
     IrefGray = rgb2gray(Iref);  
     IrefGray = IrefGray/mean(IrefGray(:));
+    return
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% 3D data cube: 3 wavelengths
@@ -91,7 +92,7 @@ function [Sg_Poiss, Yg_Poiss, Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PP
                     fileName=sprintf(outFile, PPP(LevP), SBR(LevSBR));
                     Y=sparse(reshape(Yg_Poiss,N,[]));
                     fprintf("Saving file %i/%i\n",n,length(PPP)*length(SBR));
-                    save(fileName, 'Dref', 'Y', 'IrefGray');     
+                    save(fileName, 'Y');     
                     n=n+1;
                 end
             end    

@@ -60,8 +60,10 @@ end
 
 for i=1:2
     outFile=sprintf("%s/Samples_%s_%s_K_%i_DownS_%i_PPP_%%.3f_SBR_%%.3f.mat", irfname, scenes{selectedScene}, backNames(i), T, downSam);
-    build_synth(D_HR, I_HR, F, T, PPP, SBR, backChoices(i), downSam, outFile);
+    [Dref, IrefGray] = build_synth(D_HR, I_HR, F, T, PPP, SBR, backChoices(i), downSam, outFile);
 end
+
+save(strcat(scenes{selectedScene}, '_ref_img.mat'), 'Dref', 'IrefGray');
 
 if(0)    
     h = F(:,round(T/2));   % T'x1 Select one IRF or maybe you have it in a file
