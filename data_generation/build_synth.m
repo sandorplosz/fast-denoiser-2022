@@ -34,7 +34,6 @@ function [ Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PPP, SBR, choix, down
     Iref = Iref/max(Iref(:));
     IrefGray = rgb2gray(Iref);  
     IrefGray = IrefGray/mean(IrefGray(:));
-    return
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% 3D data cube: 3 wavelengths

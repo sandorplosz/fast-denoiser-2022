@@ -95,7 +95,7 @@ if(0)
 end
 
 %[R,C] = size(Dref);
-N=R*C;
+%N=R*C;
 
 if(0)
     n=1;
