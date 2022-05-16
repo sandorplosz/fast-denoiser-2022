@@ -1,65 +1,67 @@
 clearvars
 clc
-%scenedir="C:\LocalStore\ps2014\Development\lindell_2018_code\middlebury\raw";
-scenedir="~/Development/lindell_2018_code/middlebury/raw";
+scenedir="./raw";
 scenes = { 'Reindeer', 'Art', 'Plastic', 'Moebius', 'Laundry', ...
             'Dolls', 'Bowling1', 'Books' };
 selectedScene=2;
 downSam = 2;
 T = 1024;
-Background=0;
 
 D_HR   = double(imread(strcat(scenedir, '/', scenes{selectedScene}, '/disp1.png')));
 I_HR   = double(imread(strcat(scenedir, '/', scenes{selectedScene}, '/view1.png')));
 
-PPP = [0.1, 1, 5, 10, 30];
-SBR  = [0.1, 1, 5, 10, 30];
-%PPP=[0.5,5]; SBR=[0.5,5];
+PPP = [0.1, 1, 5, 10, 50 100];
+SBR  = [0.1, 1, 5, 10, 50 100];
 Lev_S = SBR .*PPP ./(1+SBR);
 Lev_B = PPP - Lev_S;
- 
-if(Background==0)
-    backChoice = 'GENERATE_NOISY_CUBES';%      Unif Back
-    backName = "UnifBack";
-elseif(Background==1)
-    backChoice = 'GENERATE_NOISY_CUBES_GAMMA';%     Gamma back 
-    backName = "GammaBack";
-end
 
-if(1)
-    %% True IRF
-    load F_real2_100s
-    F = processF(F,T);
-    h=F(:,ceil(size(F,2)/2));
-    F_window=getIRFWindow(h,0.1);
-    fname="F_real_proc";
-    save(strcat(fname,'.mat'),'F', 'F_window');
-    fid = fopen(sprintf('./%s/bin/%s_%i_%i.bin',fname, fname,F_window(1),F_window(2)) , 'w');
-    fwrite(fid , h , 'float32');
-    fclose(fid);      
+backChoices = ["GENERATE_NOISY_CUBES", "GENERATE_NOISY_CUBES_GAMMA"];
+backNames = ["UnifBack", "GammaBack"];
+
+irf=1; % 1: Real, 2: Gaussian
+
+if(irf==1)
+    irfname="F_real_proc";
 else
     sigma2=6^2;
-    h= 1/sqrt(2*pi*sigma2)* exp(- ((1:T)-round(T/2)).^2/2/(sigma2));
-    h = h(:)/sum(h);
-    [~,attack] = max(h);
-    l = length(h);
-    F=zeros(l,l);    
-    for i=1:l
-        F(:,i)  = circshift(h,[i-attack 0]);
-    end
-    F_window=getIRFWindow(h,0.1);
-    F = F(1:T,1:T);
-    fname=sprintf("F_gauss_sig_%i",sqrt(sigma2));
-    save(strcat(fname,'.mat'),'F', 'F_window');
-    fid = fopen(strcat('./bin/',fname,'.bin') , 'w');
-    fwrite(fid , h , 'float32');
-    fclose(fid);    
+    irfname=sprintf("F_gauss_sig_%i",sqrt(sigma2));
 end
 
-dist=fitdist(F(:,100),'normal');
+if(0) % Generate IRF
+    if(irf==1)
+        %% True IRF
+        load F_real2_100s
+        F = processF(F,T);
+        h=F(:,ceil(size(F,2)/2));
+        F_window=getIRFWindow(h,0.1);
+        save(strcat(irfname,'.mat'),'F', 'F_window');
+        fid = fopen(sprintf('./%s/bin/%s_%i_%i.bin',irfname, irfname,F_window(1),F_window(2)) , 'w');
+        fwrite(fid , h , 'float32');
+        fclose(fid);      
+    else    
+        h= 1/sqrt(2*pi*sigma2)* exp(- ((1:T)-round(T/2)).^2/2/(sigma2));
+        h = h(:)/sum(h);
+        [~,attack] = max(h);
+        l = length(h);
+        F=zeros(l,l);    
+        for i=1:l
+            F(:,i)  = circshift(h,[i-attack 0]);
+        end
+        F_window=getIRFWindow(h,0.1);
+        F = F(1:T,1:T);
+        save(strcat(irfname,'.mat'),'F', 'F_window');
+        fid = fopen(strcat('./bin/',fname,'.bin') , 'w');
+        fwrite(fid , h , 'float32');
+        fclose(fid);    
+    end
+else
+    load(strcat(irfname,'.mat'));
+end
 
-outFile=sprintf("%s/Samples_%s_%s_K_%i_DownS_%i_PPP_%%.3f_SBR_%%.3f.mat", fname, scenes{selectedScene}, backName, T, downSam);
-build_synth(D_HR, I_HR, F, T, PPP, SBR, backChoice, downSam, outFile);
+for i=1:2
+    outFile=sprintf("%s/Samples_%s_%s_K_%i_DownS_%i_PPP_%%.3f_SBR_%%.3f.mat", irfname, scenes{selectedScene}, backNames(i), T, downSam);
+    build_synth(D_HR, I_HR, F, T, PPP, SBR, backChoices(i), downSam, outFile);
+end
 
 if(0)    
     h = F(:,round(T/2));   % T'x1 Select one IRF or maybe you have it in a file
