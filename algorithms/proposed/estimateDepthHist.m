@@ -25,8 +25,8 @@ function [Dep, Refl] = estimateDepthHist(Y, F, neighbours, p, estimateBackground
     h  = flipud(h); % flip h in preparation to FFT fft(log(h+eps))  
 
     %%%%TEMP CODE
-    h=single(h);
-    Yt=single(Yt);
+    %h=single(h);
+    %Yt=single(Yt);
     %%%
 
     %h=log(h+eps); % the log is optional
@@ -35,7 +35,7 @@ function [Dep, Refl] = estimateDepthHist(Y, F, neighbours, p, estimateBackground
     XcorrMatrix = ifft(Yf.*hf,'symmetric'); 
     %[xv, xi] = sort(XcorrMatrix(:,1156),'descend');
     %         
-    if(estimateBackground==2)        
+    if(estimateBackground==1)        
         [~, DD] = max(XcorrMatrix);    
         DD      = DD(:);
         %fprintf("DAE before: %f\n", log10(sum(abs(DD(:)*p.Tbin*3*10^8/2-Dref(:)))/N));
@@ -52,14 +52,14 @@ function [Dep, Refl] = estimateDepthHist(Y, F, neighbours, p, estimateBackground
         %[~,b]=max(max(XcorrMatrix- Back',2)); b=b*p.Tbin*3*10^8/2;
         %log10(sum(abs(a(:)*p.Tbin*3*10^8/2-Dref(:)))/N)
         %log10(sum(abs(b(:)*p.Tbin*3*10^8/2-Dref(:)))/N)
-    elseif(estimateBackground==3)        
+    elseif(estimateBackground==2)        
         XcorrMatrix=XcorrMatrix';
         Ysort     = sort(XcorrMatrix); % N  T
         ProfileT  = median(Ysort(1:floor(0.2*N),:,:)); %          
         ProfileT  = (ProfileT-mean(ProfileT,2)); 
         ProfileN  = median(XcorrMatrix(:,1:T),2);
         XcorrMatrix  = max(XcorrMatrix -  max(0,ProfileT + ProfileN), 0)';       
-    elseif(estimateBackground==4)    
+    elseif(estimateBackground==3)    
         Back=zeros(T,1);
         count=zeros(T,1);
         [M, DD] = max(XcorrMatrix);    
@@ -113,6 +113,5 @@ function [Dep, Refl] = estimateDepthHist(Y, F, neighbours, p, estimateBackground
     end
    
     Dep=reshape(Dep,row,col);
-    Refl = reshape(Refl,row,col);
-    
+    Refl = reshape(Refl,row,col);    
 end

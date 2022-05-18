@@ -4,8 +4,8 @@ useTargetDetect = 0;
 selirf=2;
 init
 estimateBackground=2;
-PPP = [0.1, 1, 5, 10, 30];
-SBR  = [0.1, 1, 5, 10, 30];
+PPP = [0.1, 1, 5, 10, 50 100];
+SBR  = [0.1, 1, 5, 10, 50 100];
 
 outDir = strcat('../../results/proposed/',irfs(selirf));
 

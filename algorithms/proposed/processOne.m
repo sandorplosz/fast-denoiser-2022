@@ -1,13 +1,13 @@
 clearvars
-useTargetDetect = 1; 
+useTargetDetect = 0; 
 % F_gauss_sig_6=1,  F_real_proc=2
 selirf=2;
 init
-estimateBackground=1;
-PPP = [0.1, 1, 5, 10, 30];
-SBR  = [0.1, 1, 5, 10, 30];
-addpath('/home/ps2014/Development/matlab/fast_denoiser_2022/algo')
-addpath('/home/ps2014/Development/Algorithm2_Parallel_TargetDetection_AH/build_cuda')
+estimateBackground=2;
+PPP = [0.1, 1, 5, 10, 50, 100];
+SBR  = [0.1, 1, 5, 10, 50, 100];
+addpath('../../algorithms/proposed/')
+%addpath('/home/ps2014/Development/Algorithm2_Parallel_TargetDetection_AH/build_cuda')
 
 Neighbours.I_resol = [1 3 7] ;  % size of spatial correlations Requires
 [Neighbours.neighb, Neighbours.indGraph, Neighbours.local_shifts]  =  Build_Graph_Neighbours_Array_v2(row,col,[1 Neighbours.I_resol(2:end)]); % Define graph of correlations between pixels
@@ -19,8 +19,6 @@ for i=1:length(Neighbours.I_resol)-1
 end
 s_filters=strcat(s_filters, int2str(Neighbours.I_resol(end)));
 
-DAE = zeros(length(PPP),length(SBR),2);
-IAE = zeros(length(PPP),length(SBR),2);
 ppp=10; sbr=10;
 k=2;
 
@@ -34,12 +32,18 @@ end
 load(strcat(dataDir,'/',inFile),'Y');
 Y=full(Y);
 Y=reshape(Y,row,col,[]);
+load ../../data_generation/Art_ref_img.mat
 
 if useTargetDetect
     [Dep, Refl] = estimateDepthTof(Y, neighboursSM, params, estimateBackground);        
 else
     [Dep, Refl] = estimateDepthHist(Y, F, neighboursSM, params, estimateBackground);
 end
+
+mean(abs(Dep(:)-Dref_orig(:))) % 66
+a=Dep~=0;
+mean(abs(Dep(a)-Dref_orig(a))) % 22.4
+keyboard
 
 % Load app results for comparison
 %run mres_app.m
@@ -77,5 +81,5 @@ end
 Dtype = 'Estimates';
 [Dest, Rest, ~, D_uncert, R_uncert] = Fct_Denoise_WMF_v3(Dep,Refl,Neighbours, params,F,Dtype, 0,0,params.CvPC, 3, 1);
 
-sum(abs(Dest(:)-den_depth(:))>0.1)
-figure;imagesc(abs(Dest-den_depth))
+%sum(abs(Dest(:)-den_depth(:))>0.1)
+%figure;imagesc(abs(Dest-den_depth))

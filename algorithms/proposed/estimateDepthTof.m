@@ -1,4 +1,8 @@
-function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground)
+function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, dopostproc)
+
+    if exist('dopostproc','var') ~=1
+        dopostproc = true;
+    end    
 
     [row, col, T] = size(Y);
     N=row*col;
@@ -82,13 +86,16 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground)
         n=di(5);
         [dep(n),td_depth(n)] 
     end
-    indd=(sum(Y(:,:,2:end),3) == 1);  % AH-mod
-    Det_TD(indd) = 1;            % AH-mod    
-    Dep  = Dep(:).*Det_TD(:);
-    ind     = (Det_TD(:)==0);
-    r0      = reshape(Y(:,:,1),N,1);
-    %R_TD(ind)    = r0(ind);
-    Refl(ind)    = 10-r0(ind); Refl(r0>=10)=1; % AH-mod    
+
+    if(dopostproc)
+        indd=(sum(Y(:,:,2:end),3) == 1);  % AH-mod
+        Det_TD(indd) = 1;            % AH-mod    
+        Dep  = Dep(:).*Det_TD(:);
+        ind     = (Det_TD(:)==0);
+        r0      = reshape(Y(:,:,1),N,1);
+        %R_TD(ind)    = r0(ind);
+        Refl(ind)    = 10-r0(ind); Refl(r0>=10)=1; % AH-mod    
+    end
     
     Dep=reshape(Dep,row,col);
     %Dep = Dep *Tbin*3*10^8/2;% AH-mod

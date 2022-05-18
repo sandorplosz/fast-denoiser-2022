@@ -1,11 +1,10 @@
 clearvars
-addpath('/home/ps2014/Development/matlab/fast_denoiser_2022/algo')
-Background = 1;  %0 for uniform backgroun, 1 Gamma-shaped background
+addpath('../../algorithms/proposed/')
 useTargetDetect = 0;
 init
 
-PPP = [0.1, 0.5, 1, 5, 10];
-SBR  = [0.1, 0.5, 1, 5, 10];
+PPP = [0.1, 1, 5, 10, 30];
+SBR  = [0.1, 1, 5, 10, 30];
 
 outDir = '/home/ps2014/Development/matlab/fast_denoiser_2022/results_algo';
 load /home/ps2014/Development/matlab/fast_denoiser_2022/data_generation/F_real2_100s
