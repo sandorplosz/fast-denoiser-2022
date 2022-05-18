@@ -1,9 +1,8 @@
 clearvars
-addpath('../proposed/')
 useTargetDetect=0;
 % F_gauss_sig_6=1,  F_real_proc=2
 selirf=2;
-init
+run ../proposed/init.m
 PPP = [0.1, 1, 5, 10, 50, 100];
 SBR  = [0.1, 1, 5, 10, 50, 100];
 T=K;
