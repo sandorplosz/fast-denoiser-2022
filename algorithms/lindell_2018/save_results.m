@@ -9,8 +9,8 @@ SBR  = [0.1, 1, 5, 10, 50 100];
 outDir = strcat('../../results/lindell/',irfs(selirf));
 
 %ppp=0.1; sbr=0.1;
-DSE = zeros(length(PPP),length(SBR),2);
-ISE = zeros(length(PPP),length(SBR),2);
+DAE = zeros(length(PPP),length(SBR),2);
+%IAE = zeros(length(PPP),length(SBR),2);
 SumValid = zeros(length(PPP),length(SBR),2);
 
 n=1;
@@ -36,9 +36,10 @@ for k=1:2 % Background
             im2 = im2(r1_l:r1_l+s1-1,r2_l:r2_l+s2-1);        
                  
             mask=im2~=0;
-            SumValid(i,j,k) = sum(mask(:));
+            sumValid = sum(mask(:));
+            SumValid(i,j,k) = sumValid;
             %dae=sum(sum(abs(Dest(mask)-Dref(mask))))/(sumValid);
-            DSE(i,j,k)=sum(abs(im2(:)-Dref(:)));       
+            DAE(i,j,k)=sum(abs(im2(:)-Dref(:)))/sumValid;       
             %ISE(i,j,k)=sum(sum(abs(Iest(mask)-IrefGray(mask))));
 
             if(0)
@@ -51,4 +52,4 @@ for k=1:2 % Background
     end
 end
 
-save(strcat(outDir,"/res_calculated.mat"), 'DSE', 'ISE', 'SumValid');
+save(strcat(outDir,"/res_calculated.mat"), 'DAE', 'SumValid');
