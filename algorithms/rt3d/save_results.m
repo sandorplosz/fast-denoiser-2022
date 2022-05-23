@@ -1,7 +1,7 @@
 clearvars;
-selirf=2;
+selirf=1;
 useTargetDetect=0;
-run ../proposed/init.m
+run ../init.m
 
 PPP = [0.1, 1, 5, 10, 50, 100];
 SBR  = [0.1, 1, 5, 10, 50, 100];
@@ -12,6 +12,10 @@ if ~exist(outDir, 'dir')
     mkdir(outDir)
 end
 
+DAE = zeros(length(PPP),length(SBR),2);
+IAE = zeros(length(PPP),length(SBR),2);
+SumValid = zeros(length(PPP),length(SBR),2);
+
 n=1;
 for k=1:2 % Background
     for i=1:length(PPP)
@@ -20,11 +24,10 @@ for k=1:2 % Background
 
             filename=sprintf('%s_%s_K_%i_DownS_%i_PPP_%.3f_SBR_%.3f', ...
                     selectedScene, s_back{k}, K, downSam,ppp, sbr);
-            path = ['../../results/rt3d/pc/output_' filename '/frame0_w0.ply'];
+            path = strcat(outDir, '/pc/output_', filename, '/frame0_w0.ply');
             
             if ~isfile(path)
                 error("Could not find file: %s",filename);
-                %continue;
             end
 
             fprintf("Processing file %i/%i\n",n,length(PPP)*length(SBR)*2);
@@ -49,8 +52,9 @@ for k=1:2 % Background
 
             %figure;plot(Dep(:));hold on; plot(Dref_orig(:),'r');
             sumValid = sum(mask(:));
-            dae=sum(abs(Dep(mask)-Dref_orig(mask)))/sumValid;
-            iae=sum(abs(Refl(mask)-IrefGray(mask)))/mean(IrefGray(mask));
+            SumValid(i,j,k) = sumValid;
+            DAE(i,j,k)=sum(abs(Dep(mask)-Dref_orig(mask)))/sumValid;
+            IAE(i,j,k)=sum(abs(Refl(mask)-IrefGray(mask)))/mean(IrefGray(mask));
             
             if(0)
                 ca=[min(Dref_orig(:)), max(Dref_orig(:))];
@@ -61,8 +65,9 @@ for k=1:2 % Background
             end
             
             %save(['../../results/rt3d/' filename '.mat'], 'Dep', 'Refl', 'dae', 'iae');
-            save(strcat(outDir, '/', filename, '.mat'), 'dae', 'iae', "sumValid");
             n=n+1;
         end
     end
 end
+
+save(strcat(outDir, '/results_processed.mat'), 'DAE', 'IAE', "SumValid");
