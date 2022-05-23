@@ -29,6 +29,7 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         Tofmat(n,1:length(tof{n})) = sort(tof{n});
     end
     
+    Back=1/T*ones(1,T);
     if(estimateBackground)
         disp('    Estimation of Background shape')
                %%% method 2: In case you do not have histograms Y and only have TOF
@@ -51,19 +52,17 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         DD      = DD(:);
         Dist    = abs(DD - DD(neighbours));
         Dist2   = sort(Dist,2,'ascend');
-        mask    = sum(Dist2(:,2:4),2)>50;   %Dist2(:,2)>5;
-        Back    = hist(DD.*mask(:),1:T);
-        Back(1) = Back(2);
-        a=Back;
-        %Back    = movmean(Back,[1,2]);
-        Back    = movmean(Back,[p.Attack, p.trailing]);               
-        Back    = Back/sum(Back);
+        mask    = sum(Dist2(:,2:4),2)>150;   %Dist2(:,2)>5;
+        if(sum(mask)>min(2*T,0.1*N))
+            Back    = hist(DD.*mask(:),1:T);
+            Back(1) = Back(2);
+            %Back    = movmean(Back,[1,2]);
+            Back    = movmean(Back,[p.Attack, p.trailing]);               
+            Back    = Back/sum(Back);
+        end
         %temp=[a;Back;td_backg']; 
         %sum(abs(Back-td_backg')>0.001)
         %Back=td_backg';
-        
-    else
-        Back=1/T*ones(1,T);
     end
     
     debug=0;    

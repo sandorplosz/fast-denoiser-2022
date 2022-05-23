@@ -1,7 +1,7 @@
 clearvars
 useTargetDetect = 0;
 % F_gauss_sig_6=1,  F_real_proc=2
-selirf=2;
+selirf=1;
 init
 PPP = [0.1, 1, 5, 10, 50, 100];
 SBR  = [0.1, 1, 5, 10, 50, 100];
@@ -42,7 +42,7 @@ for k=1:2
                 DAE_class(i,j,k)=sum(sum(abs(res_class.Dep-Dref_orig)))/(row*col)*params.Tbin *3*10^8/2;
             end                      
 
-            if(1)
+            if(0)
                 fpath = strcat(path_lindell,'Samples_',inFile,'.mat');
                 if ~isfile(fpath)
                     warning(strcat("Could not find file: ",fpath));            
@@ -68,22 +68,26 @@ for k=1:2
                 DAE_halimi(i,j,k)=sum(sum(abs(res_halimi.Dest-Dref)))/(row*col);
             end
 
-            fpath = strcat(path_rt3d,'/',inFile,'.mat');
-            if ~isfile(fpath)
-                warning(strcat("Could not find file: ",fpath));            
-            else
-                res_rt3d = load(fpath);                
-                DAE_rt3d(i,j,k)=res_rt3d.dae*params.Tbin*3*10^8/2;
-                rt3d_valid(i,j,k) = res_rt3d.sumValid/(row*col);
-            end            
+            if(0)
+                fpath = strcat(path_rt3d,'/',inFile,'.mat');
+                if ~isfile(fpath)
+                    warning(strcat("Could not find file: ",fpath));            
+                else
+                    res_rt3d = load(fpath);                
+                    DAE_rt3d(i,j,k)=res_rt3d.dae*params.Tbin*3*10^8/2;
+                    rt3d_valid(i,j,k) = res_rt3d.sumValid/(row*col);
+                end            
+            end
 
-            fpath = strcat(path_prop_mat,'/',inFile,'.mat');
-            if ~isfile(fpath)
-                warning(strcat("Could not find file: ",fpath));            
-            else
-                res_prop_mat = load(fpath);
-                DAE_prop_mat(i,j,k)=sum(sum(abs(res_prop_mat.Dest-Dref)))/(row*col);
-            end            
+            if(1)
+                fpath = strcat(path_prop_mat,'/',inFile,'.mat');
+                if ~isfile(fpath)
+                    warning(strcat("Could not find file: ",fpath));            
+                else
+                    res_prop_mat = load(fpath);
+                    DAE_prop_mat(i,j,k)=sum(sum(abs(res_prop_mat.Dest-Dref)))/(row*col);
+                end            
+            end
     
             inFile2=sprintf("%s_app.m", strrep(inFile,'.','_'));
             fpath = strcat(path_prop,inFile2);
@@ -92,7 +96,6 @@ for k=1:2
             else
                 run(fpath)
                 DAE_prop(i,j,k)=sum(sum(abs(den_depth-Dref)))/(row*col);
-                %DAE_xcorr(i,j,k)=sum(sum(abs(res_prop.Dep2-Dref)))/(row*col);
             end  
         end
     end

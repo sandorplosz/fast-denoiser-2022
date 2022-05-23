@@ -1,7 +1,7 @@
 clearvars
 useTargetDetect = 1; 
 % F_gauss_sig_6=1,  F_real_proc=2
-selirf=2;
+selirf=1;
 init
 estimateBackground=1;
 PPP = [0.1, 1, 5, 10, 50 100];
