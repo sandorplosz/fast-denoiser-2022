@@ -12,9 +12,11 @@ else
     s_tg="";
 end
 
-basedir = mfilename('fullpath');
-basedir = [erase(basedir, "init"), '/../'];
-dir(basedir)
+algodir = mfilename('fullpath');
+algodir = erase(algodir, "init");
+addpath([algodir, '/proposed/']);
+basedir = [algodir, '/../'];
+%dir(basedir)
 
 scenes = { 'Reindeer', 'Art', 'Plastic', 'Moebius', 'Laundry', ...
             'Dolls', 'Bowling1', 'Books' };

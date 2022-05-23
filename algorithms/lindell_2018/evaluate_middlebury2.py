@@ -36,13 +36,13 @@ parser.add_argument('--naive', default=None, type=str,
                     metavar='1 or 0', help='If option is Upsample8xDenoise \
                     then enable naive upsample with pretrained weights')
 
+SBR = ['0.100', '1.000', '5.000', '10.000', '50.000', '100.000']
+#SBR = ['50.000']
 PPP = ['0.100', '1.000', '5.000', '10.000', '50.000', '100.000']
-SBR = ['0.100', '1.000', '5.000', '10.000', '30.000', '100.000']
-
 backgrounds = ['UnifBack', 'GammaBack']
 irfs = ['F_gauss_sig_6', 'F_real_proc']
 backg = 1
-selirf=1
+selirf=0
 
 scenedir = '../../data_generation/' + irfs[selirf]
 outdir = '../../results/lindell/' + irfs[selirf]

@@ -1,7 +1,7 @@
 clearvars
 useTargetDetect = 1; 
 % F_gauss_sig_6=1,  F_real_proc=2
-selirf=2;
+selirf=1;
 run ../init.m
 PPP = [0.1, 1, 5, 10, 50 100];
 SBR  = [0.1, 1, 5, 10, 50 100];
@@ -38,8 +38,8 @@ for k=1:2 % Background
             mask=im2~=0;
             SumValid(i,j,k) = sum(mask(:));
             %dae=sum(sum(abs(Dest(mask)-Dref(mask))))/(sumValid);
-            DSE(i,j,k)=sum(abs(res_lindell.im2(:)-Dref(:)));       
-            ISE(i,j,k)=sum(sum(abs(Iest(mask)-IrefGray(mask))));
+            DSE(i,j,k)=sum(abs(im2(:)-Dref(:)));       
+            %ISE(i,j,k)=sum(sum(abs(Iest(mask)-IrefGray(mask))));
 
             if(0)
                 fprintf("Saving file %i/%i\n",n,length(PPP)*length(SBR)*2);
