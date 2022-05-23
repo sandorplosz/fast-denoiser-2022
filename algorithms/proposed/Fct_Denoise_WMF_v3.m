@@ -336,8 +336,8 @@ if(useguide==1)
       
     [ Dguide, Lvect , D_up_bar]   = Build_Dguide_Graph_neighbors_v2(DnMat,row,col,Neighb.neighb,Neighb.local_shifts,pars.ThreshDep,GuideD,ParamPC,pars.Tbin,CvPC);
     dguide = reshape(Dguide',row,col,[]);
-    figure;for i=1:3, subplot(1,3,i);imagesc(dguide(:,:,i));caxis([2 15]*pars.Tbin*3*10^8/2);end
-    keyboard
+   % figure;for i=1:3, subplot(1,3,i);imagesc(dguide(:,:,i));caxis([2 15]*pars.Tbin*3*10^8/2);end
+    %keyboard
     % [ I_up_bar, Iguide, Lvect ]   = Build_Iguide_Graph_neighbors(InMat,row,col,Neighb.neighb,GuideI);
     %sum(sum(abs(dguide(:,:,1)-dguide_res_1)>0.1))
     %sum(sum(abs(dguide(:,:,2)-dguide_res_3)>0.1))

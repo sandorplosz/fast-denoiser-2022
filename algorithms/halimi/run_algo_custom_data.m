@@ -1,7 +1,7 @@
 clearvars
 useTargetDetect=0;
 % F_gauss_sig_6=1,  F_real_proc=2
-selirf=2;
+selirf=1;
 run ../proposed/init.m
 PPP = [0.1, 1, 5, 10, 50, 100];
 SBR  = [0.1, 1, 5, 10, 50, 100];
@@ -12,6 +12,10 @@ GuideI =  0; %0 for no filtering, 1 for DnCNN
 
 dataDir = strcat('../../data_generation/',irfs(selirf));
 outDir = strcat('../../results/halimi/',irfs(selirf));
+
+if ~exist(outDir, 'dir')
+    mkdir(outDir)
+end
 
 init_custom_data
 

@@ -43,7 +43,7 @@ else
     P         = length(tof); % Nbre photons
     %p1(1)     = ProbPrior;
     DevN2     = ceil(PhotStep/2);
-    BackT     = log(BackT(tof)); %********
+    BackT     = log(BackT(tof)+eps); %********
 %     BackT     = BackT(:);        %********
     sumB      = sum(BackT);      %********
 %     weight    = zeros(1,T);      %********
@@ -54,7 +54,7 @@ else
 %     %%%%   matched filter (approximate!! )
      %v         = sort( exp(-  (tof - tof').^2/2/sigma2 - BackT(:)/2-BackT(:)'/2 ));       %********
      v= exp(- (tof - tof').^2/2/sigma2 - BackT(:)/2-BackT(:)'/2 );
-     %[~, ind] = sort(sum(v),'descend');     %********
+     %[val, ind] = sort(sum(v),'descend');     %********
      [~, ind] = max(sum(v));     %********
      D_Xcorr   = tof(ind);     %********
       

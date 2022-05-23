@@ -42,11 +42,10 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         end
         toc(Start);
         clear TOFn     
-
-        dd=reshape(DD,row,col);
-        run mres_td.m
+        %dd=reshape(DD,row,col); figure;imagesc(dd); figure;imagesc(td_dep1)
+        %run mres_td.m
         %sum(DD~=td_dep1(:)')
-        DD=td_dep1(:)';
+        %DD=td_dep1(:)';
 
         %%%%%%%%%%%%%%%%%%%%
         DD      = DD(:);
@@ -60,7 +59,8 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         Back    = movmean(Back,[p.Attack, p.trailing]);               
         Back    = Back/sum(Back);
         %temp=[a;Back;td_backg']; 
-        sum(abs(Back-td_backg')>0.001)
+        %sum(abs(Back-td_backg')>0.001)
+        %Back=td_backg';
         
     else
         Back=1/T*ones(1,T);
@@ -85,6 +85,8 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         [dv, di]=sort(abs(dep(:)-td_depth(:)),'descend');
         n=di(5);
         [dep(n),td_depth(n)] 
+        sum(dep(:)~=td_dep2(:))
+        figure;imagesc(abs(dep-td_dep2))
     end
 
     if(dopostproc)

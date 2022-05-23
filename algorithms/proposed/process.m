@@ -1,13 +1,18 @@
 clearvars
-useTargetDetect = 0; 
+useTargetDetect = 1; 
 % F_gauss_sig_6=1,  F_real_proc=2
 selirf=2;
 init
-estimateBackground=2;
+estimateBackground=1;
 PPP = [0.1, 1, 5, 10, 50 100];
 SBR  = [0.1, 1, 5, 10, 50 100];
+doPostProc=0;
 
-outDir = strcat('../../results/proposed/',irfs(selirf));
+outDir = strcat('../../results/proposed_matlab/',irfs(selirf));
+
+if ~exist(outDir, 'dir')
+    mkdir(outDir)
+end
 
 Neighbours.I_resol = [1 3 7] ;  % size of spatial correlations Requires
 %Neighbours.I_resol = [1 7 13] ;  % size of spatial correlations Requires
@@ -42,7 +47,7 @@ for k=1:2 % Background
             fprintf("Processing file %i/%i\n",n,length(PPP)*length(SBR)*2);
 
             if useTargetDetect
-                [Dep, Refl] = estimateDepthTof(Y, neighboursSM, params, estimateBackground);        
+                [Dep, Refl] = estimateDepthTof(Y, neighboursSM, params, estimateBackground, doPostProc);        
             else
                 [Dep, Refl] = estimateDepthHist(Y, F, neighboursSM, params, estimateBackground);
             end

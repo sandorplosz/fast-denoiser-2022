@@ -18,7 +18,7 @@ Lev_B = PPP - Lev_S;
 backChoices = ["GENERATE_NOISY_CUBES", "GENERATE_NOISY_CUBES_GAMMA"];
 backNames = ["UnifBack", "GammaBack"];
 
-irf=1; % 1: Real, 2: Gaussian
+irf=2; % 1: Real, 2: Gaussian
 
 if(irf==1)
     irfname="F_real_proc";
