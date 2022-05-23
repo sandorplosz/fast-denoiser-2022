@@ -27,7 +27,7 @@ else
     irfname=sprintf("F_gauss_sig_%i",sqrt(sigma2));
 end
 
-if(0) % Generate IRF
+if(1) % Generate IRF
     if(irf==1)
         %% True IRF
         load F_real2_100s
@@ -35,7 +35,7 @@ if(0) % Generate IRF
         h=F(:,ceil(size(F,2)/2));
         F_window=getIRFWindow(h,0.1);
         save(strcat(irfname,'.mat'),'F', 'F_window');
-        fid = fopen(sprintf('./%s/bin/%s_%i_%i.bin',irfname, irfname,F_window(1),F_window(2)) , 'w');
+        fid = fopen(sprintf('./%s_%i_%i.bin',irfname,F_window(1),F_window(2)) , 'w');
         fwrite(fid , h , 'float32');
         fclose(fid);      
     else    
@@ -50,7 +50,7 @@ if(0) % Generate IRF
         F_window=getIRFWindow(h,0.1);
         F = F(1:T,1:T);
         save(strcat(irfname,'.mat'),'F', 'F_window');
-        fid = fopen(strcat('./bin/',fname,'.bin') , 'w');
+        fid = fopen(strcat('./', irfname, '.bin') , 'w');
         fwrite(fid , h , 'float32');
         fclose(fid);    
     end

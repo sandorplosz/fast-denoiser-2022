@@ -13,7 +13,7 @@ else
 end
 
 basedir = mfilename('fullpath');
-basedir = [erase(basedir, "init"), '/../../'];
+basedir = [erase(basedir, "init"), '/../'];
 dir(basedir)
 
 scenes = { 'Reindeer', 'Art', 'Plastic', 'Moebius', 'Laundry', ...
