@@ -8,9 +8,9 @@ for k=1:2 % Background
             ppp=PPP(i); sbr= SBR(j);
             filename=sprintf('%s_%s_K_%i_DownS_%i_PPP_%.3f_SBR_%.3f', ...
                     selectedScene, s_back{k}, K, downSam,ppp, sbr);
-            file = strcat('./real-time-single-photon-lidar/output_', filename, '/frame0_w0.ply');
+            file = strcat('./output_', filename, '/frame0_w0.ply');
             if ~isfile(file)
-                %warning(strcat("Could not find file: ",filename));
+                warning(strcat("Could not find file: ",filename));
                 n=n+1;
                 %continue;
             end
