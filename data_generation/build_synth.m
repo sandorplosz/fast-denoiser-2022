@@ -66,7 +66,7 @@ function [ Dref, IrefGray] = build_synth(D_HR, I_HR, F, K, PPP, SBR, choix, down
                     fileName=sprintf(outFile, PPP(LevP), SBR(LevSBR));
                     Y=sparse(reshape(Yg_Poiss,N,[]));
                     fprintf("Saving file %i/%i\n",n,length(PPP)*length(SBR));
-                    save(fileName, 'Dref', 'Y', 'IrefGray');     
+                    save(fileName, 'Y');     
                     n=n+1;
                 end
             end

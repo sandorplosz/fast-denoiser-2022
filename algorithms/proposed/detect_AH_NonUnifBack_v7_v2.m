@@ -119,8 +119,11 @@ else
         s      = tof(Possib);
         fb     = BackT(Possib);     %********
         if(size(s) ~= size(Possib))
-            s = s';fb = fb';     %********
+            s = s';   %********
         end 
+        if(size(fb) ~= size(Possib))
+           fb = fb';     %********
+        end         
         fb2     = sumB - sum(fb,2);     %******** 
         TruncWind = mean(s,2);
         TruncWind = (TruncWind<bord1 | TruncWind>bord2 ); % to discard borders

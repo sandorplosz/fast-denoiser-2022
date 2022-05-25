@@ -38,14 +38,15 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         for n= 1:N
             TOFn  = Tofmat(n,:);
             TOFn  = TOFn(TOFn>1);
-            [~, ~, DD(n), ~] = ...
+            [~, ~, DD(n), rr(n)] = ...
                 detect_AH_NonUnifBack_v7_v2(TOFn   ,p.sigIRF^2,p.Alpha,p.Beta,T,p.NbrePhoton,p.ProbPrior(n),p.limitC, 3, 1/T*ones(1,T), 0);%5)
         end
         toc(Start);
         clear TOFn     
         %dd=reshape(DD,row,col); figure;imagesc(dd); figure;imagesc(td_dep1)
         %run mres_td.m
-        %sum(DD~=td_dep1(:)')
+        %sum(DD~=td_dep1(:)')        
+        %sum(rr~=td_refl(:)')  
         %DD=td_dep1(:)';
 
         %%%%%%%%%%%%%%%%%%%%
@@ -84,7 +85,8 @@ function [Dep, Refl] = estimateDepthTof(Y, neighbours, p, estimateBackground, do
         [dv, di]=sort(abs(dep(:)-td_depth(:)),'descend');
         n=di(5);
         [dep(n),td_depth(n)] 
-        sum(dep(:)~=td_dep2(:))
+        sum(Dep(:)~=td_dep2(:))
+        sum(Refl(:)~=td_refl(:))
         figure;imagesc(abs(dep-td_dep2))
     end
 

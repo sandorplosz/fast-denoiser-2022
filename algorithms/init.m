@@ -1,16 +1,7 @@
-%PPP = [0.1, 1, 10, 100];
-%SBR  = [0.1,1, 10, 100];
 downSam = 2;
 K = 1024;
-%Background = 0;  %0 for uniform backgroun, 1 Gamma-shaped background
 s_back = ["UnifBack", "GammaBack"];
 s_backest=["nobackest", "withbackest1", "withbackest2", "withbackest3"];    
-
-if(useTargetDetect)
-    s_tg="withtargetdet";
-else
-    s_tg="";
-end
 
 algodir = mfilename('fullpath');
 algodir = erase(algodir, "init");
