@@ -1,14 +1,23 @@
 import subprocess
 import sys
 import time
+import threading
+
+def thread_function(proc): 
+    print('in thread function')   
+    time.sleep(2.5)
+    print('in thread function2')   
+    proc.kill()
+    print('in thread function3')   
+    
 
 if __name__ == "__main__":  # a guard from unintended usage
     
-    for i in range(1,73):
+    for i in range(1,2):
     
         proc = subprocess.Popen(["./real-time-single-photon-lidar/RT3D.exe"],  # start the process
                                 stdin=subprocess.PIPE,  # pipe its STDIN so we can write to it
-                                stdout=sys.stdout, # pipe directly to the output_buffer
+                                stdout=subprocess.PIPE, # pipe directly to the output_buffer
                                 universal_newlines=True)
 
         time.sleep(0.5)
@@ -47,6 +56,13 @@ if __name__ == "__main__":  # a guard from unintended usage
         time.sleep(0.1)
         print("", file=proc.stdin, flush=True) # Upsampling rate
         
-        time.sleep(2.5)
-        proc.kill()
+        t = threading.Thread(target=thread_function, args=(proc,))
+        t.start()
+        
+        while True:
+            data = proc.stdout.readline()   # Alternatively proc.stdout.read(1024)
+            print(len(data))
+            sys.stdout.write(data) 
+            if len(data)==0:
+                break
 

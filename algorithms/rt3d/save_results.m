@@ -1,5 +1,5 @@
 clearvars;
-selirf=1;
+selirf=2;
 useTargetDetect=0;
 run ../init.m
 
@@ -21,6 +21,8 @@ for k=1:2 % Background
     for i=1:length(PPP)
         for j=1:length(SBR)
             ppp=PPP(i); sbr= SBR(j);
+            Lev_S = sbr*ppp/(1+sbr);
+            Iref = IrefGray * Lev_S;            
 
             filename=sprintf('%s_%s_K_%i_DownS_%i_PPP_%.3f_SBR_%.3f', ...
                     selectedScene, s_back{k}, K, downSam,ppp, sbr);
@@ -54,7 +56,7 @@ for k=1:2 % Background
             sumValid = sum(mask(:));
             SumValid(i,j,k) = sumValid;
             DAE(i,j,k)=sum(abs(Dep(mask)-Dref_orig(mask)))/sumValid;
-            IAE(i,j,k)=sum(abs(Refl(mask)-IrefGray(mask)))/mean(IrefGray(mask));
+            IAE(i,j,k)=mean(abs(Refl(mask)-Iref(mask)))/mean(Iref(mask));
             
             if(0)
                 ca=[min(Dref_orig(:)), max(Dref_orig(:))];
